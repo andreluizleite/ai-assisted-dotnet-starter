@@ -11,6 +11,9 @@ public class Customer
     public DateTime CreatedAt { get; private set; }
     public DateTime? UpdatedAt { get; private set; }
 
+    // EF Core parameterless constructor
+    private Customer() { }
+
     public Customer(Guid id, string firstName, string lastName, Email email)
     {
         Id = id;
