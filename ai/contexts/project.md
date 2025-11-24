@@ -3,11 +3,11 @@
 This repository is a .NET 8 backend using Clean Architecture and DDD.
 
 Stack:
-- .NET 8
+- .NET 10
 - C# 12
 - ASP.NET Core Minimal / Controllers
 - MediatR for CQRS
-- EF Core 8 with SQL Server
+- EF Core 10 with SQL Server
 - FluentValidation for input validation
 - xUnit for tests
 - AutoMapper for mapping between Domain and DTOs
