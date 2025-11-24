@@ -11,7 +11,7 @@ providers:
 models:
   - name: GPT-5.1 Codex
     provider: openai
-    model: gpt-5.1-codex
+    model: gpt-5.1
     temperature: 0.1
     maxTokens: 200000
     topP: 1
