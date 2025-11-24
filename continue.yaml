@@ -1,0 +1,24 @@
+name: Andre-Architecture
+version: 1.0.0
+schema: v1
+
+providers:
+  - name: openai
+    provider: openai
+    baseUrl: "https://api.openai.com/v1/responses"
+    apiKey: ${env.OPENAI_API_KEY}
+
+models:
+  - name: GPT-5.1 Codex
+    provider: openai
+    model: gpt-5.1-codex
+    temperature: 0.1
+    maxTokens: 200000
+    topP: 1
+
+context:
+  - provider: folder
+    folderPath: ./.continue
+    recursive: true
+
+commands: []
