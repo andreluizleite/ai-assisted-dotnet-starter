@@ -1,11 +1,11 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using Domain.Aggregates;
-using Domain.Interfaces;
-using Application.DTOs;
+using CleanArchitecture.Domain.Aggregates;
+using CleanArchitecture.Domain.Interfaces;
+using CleanArchitecture.Application.Dtos;
 
-namespace Application.Commands.RequestPostGeneration
+namespace CleanArchitecture.Application.Commands.RequestPostGeneration
 {
     public class RequestPostGenerationCommandHandler : IRequestHandler<RequestPostGenerationCommand, PostGenerationJobDto>
     {

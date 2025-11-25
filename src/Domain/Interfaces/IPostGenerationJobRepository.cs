@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using Domain.Aggregates;
+using CleanArchitecture.Domain.Aggregates;
 
-namespace Domain.Interfaces
+namespace CleanArchitecture.Domain.Interfaces
 {
     public interface IPostGenerationJobRepository
     {

@@ -1,8 +1,9 @@
-using Domain.Aggregates;
+using CleanArchitecture.Domain.Aggregates;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using CleanArchitecture.Domain.Enums;
 
-namespace Infrastructure.Persistence.Configurations
+namespace CleanArchitecture.Infrastructure.Persistence.Configurations
 {
     public class PostGenerationJobConfiguration : IEntityTypeConfiguration<PostGenerationJob>
     {
@@ -19,6 +20,19 @@ namespace Infrastructure.Persistence.Configurations
                 .HasConversion<string>()
                 .IsRequired();
             builder.Property(x => x.CreatedAt).IsRequired();
+
+            builder.HasData(new
+            {
+                Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
+                TenantId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
+                RequestedByUserId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
+                Topic = "AI",
+                Platform = PlatformType.LinkedIn,
+                AutoApprove = true,
+                Status = PostGenerationJobStatus.Pending,
+                CreatedAt = new DateTimeOffset(2024, 1, 1, 0, 0, 0, TimeSpan.Zero)
+            });
         }
-    }
+        }
 }
+

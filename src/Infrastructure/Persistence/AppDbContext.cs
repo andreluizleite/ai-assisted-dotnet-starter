@@ -1,11 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using CleanArchitecture.Domain.Entities;
+using CleanArchitecture.Domain.Aggregates;
 
 namespace CleanArchitecture.Infrastructure.Persistence;
 
 public class AppDbContext : DbContext
 {
     public DbSet<Customer> Customers { get; set; } = null!;
+
+    public DbSet<PostGenerationJob> PostGenerationJobs { get; set; } = null!;
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 

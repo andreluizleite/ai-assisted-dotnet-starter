@@ -1,6 +1,6 @@
 using System;
 
-namespace Application.DTOs
+namespace CleanArchitecture.Application.Dtos
 {
     public class PostGenerationJobDto
     {

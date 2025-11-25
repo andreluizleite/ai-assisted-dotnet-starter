@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Application.Commands.RequestPostGeneration
+namespace CleanArchitecture.Application.Commands.RequestPostGeneration
 {
     public class RequestPostGenerationCommandValidator : AbstractValidator<RequestPostGenerationCommand>
     {

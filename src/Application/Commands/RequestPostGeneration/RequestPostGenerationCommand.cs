@@ -1,9 +1,9 @@
 using System;
-using Domain.Enums;
+using CleanArchitecture.Domain.Enums;
 using MediatR;
-using Application.DTOs;
+using CleanArchitecture.Application.Dtos;
 
-namespace Application.Commands.RequestPostGeneration
+namespace CleanArchitecture.Application.Commands.RequestPostGeneration
 {
     public class RequestPostGenerationCommand : IRequest<PostGenerationJobDto>
     {

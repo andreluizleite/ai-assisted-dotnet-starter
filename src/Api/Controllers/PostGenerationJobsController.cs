@@ -1,10 +1,10 @@
 using System.Threading.Tasks;
-using Application.Commands.RequestPostGeneration;
-using Application.DTOs;
+using CleanArchitecture.Application.Commands.RequestPostGeneration;
+using CleanArchitecture.Application.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Api.Controllers
+namespace CleanArchitecture.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

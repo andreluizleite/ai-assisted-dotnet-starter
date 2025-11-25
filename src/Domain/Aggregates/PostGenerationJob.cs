@@ -1,7 +1,7 @@
 using System;
-using Domain.Enums;
+using CleanArchitecture.Domain.Enums;
 
-namespace Domain.Aggregates
+namespace CleanArchitecture.Domain.Aggregates
 {
     /// <summary>
     /// Aggregate root for AI Post Generation Job.

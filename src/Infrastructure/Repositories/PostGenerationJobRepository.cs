@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
-using Domain.Aggregates;
-using Domain.Interfaces;
-using Infrastructure.Persistence;
+using CleanArchitecture.Infrastructure.Persistence;
+using CleanArchitecture.Domain.Aggregates;
+using CleanArchitecture.Domain.Interfaces;
 
-namespace Infrastructure.Repositories
+namespace CleanArchitecture.Infrastructure.Repositories
 {
     public class PostGenerationJobRepository : IPostGenerationJobRepository
     {

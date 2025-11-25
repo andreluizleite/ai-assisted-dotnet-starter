@@ -1,11 +1,11 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.Commands.RequestPostGeneration;
-using Application.DTOs;
-using Domain.Aggregates;
-using Domain.Enums;
-using Domain.Interfaces;
+using CleanArchitecture.Application.Commands.RequestPostGeneration;
+using CleanArchitecture.Application.Dtos;
+using CleanArchitecture.Domain.Aggregates;
+using CleanArchitecture.Domain.Enums;
+using CleanArchitecture.Domain.Interfaces;
 using FluentAssertions;
 using Moq;
 using Xunit;

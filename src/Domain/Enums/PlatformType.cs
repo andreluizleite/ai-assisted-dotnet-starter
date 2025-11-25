@@ -1,4 +1,4 @@
-namespace Domain.Enums
+namespace CleanArchitecture.Domain.Enums
 {
     public enum PlatformType
     {

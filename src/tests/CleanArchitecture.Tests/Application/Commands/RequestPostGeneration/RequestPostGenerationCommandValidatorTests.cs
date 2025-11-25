@@ -1,5 +1,6 @@
-using Application.Commands.RequestPostGeneration;
+using CleanArchitecture.Application.Commands.RequestPostGeneration;
 using FluentAssertions;
+using CleanArchitecture.Domain.Enums;
 using System;
 using Xunit;
 
@@ -18,7 +19,7 @@ namespace CleanArchitecture.Tests.Application.Commands.RequestPostGeneration
                 TenantId = Guid.NewGuid(),
                 UserId = Guid.NewGuid(),
                 Topic = "AI",
-                Platform = Domain.Enums.PlatformType.LinkedIn,
+                Platform = PlatformType.LinkedIn,
                 AutoApprove = false
             };
 
@@ -38,7 +39,7 @@ namespace CleanArchitecture.Tests.Application.Commands.RequestPostGeneration
                 TenantId = Guid.Empty,
                 UserId = Guid.NewGuid(),
                 Topic = "AI",
-                Platform = Domain.Enums.PlatformType.LinkedIn,
+                Platform = PlatformType.LinkedIn,
                 AutoApprove = false
             };
 
@@ -58,7 +59,7 @@ namespace CleanArchitecture.Tests.Application.Commands.RequestPostGeneration
                 TenantId = Guid.NewGuid(),
                 UserId = Guid.NewGuid(),
                 Topic = string.Empty,
-                Platform = Domain.Enums.PlatformType.LinkedIn,
+                Platform = PlatformType.LinkedIn,
                 AutoApprove = false
             };
 
