@@ -1,4 +1,5 @@
 # Folder Structure
+- src
 
 ## Domain
 - Entities

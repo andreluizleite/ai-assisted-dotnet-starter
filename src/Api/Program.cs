@@ -1,3 +1,4 @@
+using CleanArchitecture.Domain.Interfaces;
 using CleanArchitecture.Domain.Repositories;
 using CleanArchitecture.Infrastructure.Persistence;
 using CleanArchitecture.Infrastructure.Repositories;
@@ -23,6 +24,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Repositories
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IPostGenerationJobRepository, PostGenerationJobRepository>();
+
 
 // MediatR
 builder.Services.AddMediatR(cfg =>
