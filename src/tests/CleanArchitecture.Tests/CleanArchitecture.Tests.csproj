@@ -17,12 +17,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Using Include="Xunit" />
+    <ProjectReference Include="..\..\Application\CleanArchitecture.Application.csproj" />
+    <ProjectReference Include="..\..\Domain\CleanArchitecture.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Domain\CleanArchitecture.Domain.csproj" />
-    <ProjectReference Include="..\..\src\Application\CleanArchitecture.Application.csproj" />
+    <Using Include="Xunit" />
   </ItemGroup>
 
 </Project>
