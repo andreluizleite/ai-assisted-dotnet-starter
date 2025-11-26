@@ -25,6 +25,12 @@
 - Migrations
 - ExternalServices (e.g., email, storage)
 
+## Worker
+- Queue
+- Handlers
+- Configuration
+- Extensions
+
 ## Api
 - Controllers
 - Filters

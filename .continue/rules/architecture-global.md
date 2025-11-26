@@ -25,3 +25,12 @@
 - In the future, this interface will be implemented using AWS SNS/SQS, but the Domain and Application layers must not reference AWS directly.
 - Notification publishing must only occur in the Infrastructure layer, never in Domain or Application logic.
 
+# Worker Services
+
+- Worker projects must be placed under src/Worker or a similar folder.
+- Workers must not contain business logic; they orchestrate Application commands/queries.
+- Workers must use dependency injection and be testable.
+- Workers must handle queue messages, errors, and retries robustly.
+- Workers must reference Application and Domain, but not Infrastructure directly (except for queue clients).
+- All queue processing logic must be idempotent and safe for retries.
+
