@@ -1,26 +1,17 @@
-using MediatR;
 using CleanArchitecture.Application.Dtos;
 using CleanArchitecture.Domain.Repositories;
+using MediatR;
 
 namespace CleanArchitecture.Application.Queries.Handlers;
 
-public class GetAllCustomersQueryHandler : IRequestHandler<GetAllCustomersQuery, List<CustomerDto>>
+public sealed class GetAllCustomersQueryHandler(ICustomerRepository repository)
+    : IRequestHandler<GetAllCustomersQuery, IReadOnlyCollection<CustomerDto>>
 {
-    private readonly ICustomerRepository _repository;
-    public GetAllCustomersQueryHandler(ICustomerRepository repository)
-        => _repository = repository;
-
-    public async Task<List<CustomerDto>> Handle(GetAllCustomersQuery request, CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<CustomerDto>> Handle(
+        GetAllCustomersQuery request,
+        CancellationToken cancellationToken)
     {
-        var customers = await _repository.GetAllAsync(cancellationToken);
-        return customers.Select(customer => new CustomerDto
-        {
-            Id = customer.Id,
-            FirstName = customer.FirstName,
-            LastName = customer.LastName,
-            Email = customer.Email.Value,
-            CreatedAt = customer.CreatedAt,
-            UpdatedAt = customer.UpdatedAt
-        }).ToList();
+        var customers = await repository.GetAllAsync(cancellationToken);
+        return customers.Select(customer => customer.ToDto()).ToArray();
     }
 }

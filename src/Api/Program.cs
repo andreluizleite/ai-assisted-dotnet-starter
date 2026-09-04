@@ -1,56 +1,59 @@
-using CleanArchitecture.Domain.Interfaces;
+using CleanArchitecture.Api.Errors;
+using CleanArchitecture.Application;
+using CleanArchitecture.Application.Commands;
+using CleanArchitecture.Application.Common.Behaviors;
+using CleanArchitecture.Application.Validators;
 using CleanArchitecture.Domain.Repositories;
 using CleanArchitecture.Infrastructure.Persistence;
 using CleanArchitecture.Infrastructure.Repositories;
 using FluentValidation;
-using FluentValidation.AspNetCore;
 using MediatR;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Controllers
 builder.Services.AddControllers();
+builder.Services.AddOpenApi();
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<ApiExceptionHandler>();
 
-// NEW Recommended OpenAPI for .NET 9/10
-builder.Services.AddOpenApi(); // replaces AddSwaggerGen()
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? "Data Source=architecture.db";
 
-// DbContext
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-// Repositories
+builder.Services.AddDbContext<AppDbContext>(
+    options => options.UseSqlite(connectionString));
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
-builder.Services.AddScoped<IPostGenerationJobRepository, PostGenerationJobRepository>();
+builder.Services.AddHealthChecks().AddDbContextCheck<AppDbContext>("database");
 
-
-// MediatR
-builder.Services.AddMediatR(cfg =>
-    cfg.RegisterServicesFromAssemblies(Assembly.Load("CleanArchitecture.Application")));
-
-// FluentValidation
-builder.Services.AddValidatorsFromAssembly(Assembly.Load("CleanArchitecture.Application"));
-builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddMediatR(
+    configuration => configuration.RegisterServicesFromAssembly(ApplicationAssembly.Reference));
+builder.Services.AddScoped<IValidator<CreateCustomerCommand>, CreateCustomerValidator>();
+builder.Services.AddScoped<IValidator<UpdateCustomerCommand>, UpdateCustomerValidator>();
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
 var app = builder.Build();
 
-// Development tools
-if (app.Environment.IsDevelopment())
+app.UseExceptionHandler();
+app.MapOpenApi();
+app.MapHealthChecks("/health");
+app.MapControllers();
+app.MapGet(
+    "/",
+    () => Results.Ok(
+        new
+        {
+            name = "AI-Assisted .NET Architecture Starter",
+            api = "/api/v1/customers",
+            health = "/health",
+            openApi = "/openapi/v1.json"
+        }));
+
+await using (var scope = app.Services.CreateAsyncScope())
 {
-    app.MapOpenApi();
-    app.UseSwaggerUI(options =>
-    {
-        options.DocumentTitle = "My API Explorer";
-        options.SwaggerEndpoint("/openapi/v1.json", "API v1");
-    });
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await DatabaseInitializer.InitializeAsync(dbContext);
 }
 
-app.UseHttpsRedirection();
-app.UseAuthorization();
+await app.RunAsync();
 
-app.MapControllers();
-
-app.Run();
+public partial class Program;

@@ -5,32 +5,50 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CleanArchitecture.Infrastructure.Repositories;
 
-public class CustomerRepository : ICustomerRepository
+public sealed class CustomerRepository(AppDbContext context) : ICustomerRepository
 {
-    private readonly AppDbContext _context;
-    public CustomerRepository(AppDbContext context) => _context = context;
+    public Task<Customer?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default) =>
+        context.Customers.FirstOrDefaultAsync(customer => customer.Id == id, cancellationToken);
 
-    public async Task<Customer?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
-        => await _context.Customers.FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
+    public async Task<IReadOnlyCollection<Customer>> GetAllAsync(
+        CancellationToken cancellationToken = default) =>
+        await context.Customers
+            .AsNoTracking()
+            .OrderBy(customer => customer.LastName)
+            .ThenBy(customer => customer.FirstName)
+            .ToArrayAsync(cancellationToken);
 
-    public async Task<List<Customer>> GetAllAsync(CancellationToken cancellationToken = default)
-        => await _context.Customers.ToListAsync(cancellationToken);
+    public Task<bool> EmailExistsAsync(
+        string email,
+        Guid? excludingCustomerId = null,
+        CancellationToken cancellationToken = default)
+    {
+        return excludingCustomerId.HasValue
+            ? context.Customers.AnyAsync(
+                customer =>
+                    customer.Email.Value == email &&
+                    customer.Id != excludingCustomerId.Value,
+                cancellationToken)
+            : context.Customers.AnyAsync(
+                customer => customer.Email.Value == email,
+                cancellationToken);
+    }
 
     public async Task AddAsync(Customer customer, CancellationToken cancellationToken = default)
     {
-        await _context.Customers.AddAsync(customer, cancellationToken);
-        await _context.SaveChangesAsync(cancellationToken);
+        await context.Customers.AddAsync(customer, cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
     }
 
     public async Task UpdateAsync(Customer customer, CancellationToken cancellationToken = default)
     {
-        _context.Customers.Update(customer);
-        await _context.SaveChangesAsync(cancellationToken);
+        context.Customers.Update(customer);
+        await context.SaveChangesAsync(cancellationToken);
     }
 
     public async Task DeleteAsync(Customer customer, CancellationToken cancellationToken = default)
     {
-        _context.Customers.Remove(customer);
-        await _context.SaveChangesAsync(cancellationToken);
+        context.Customers.Remove(customer);
+        await context.SaveChangesAsync(cancellationToken);
     }
 }

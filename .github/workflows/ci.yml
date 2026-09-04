@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+          cache: true
+          cache-dependency-path: "**/packages.lock.json"
+
+      - name: Restore
+        run: dotnet restore CleanArchitecture.sln --locked-mode
+
+      - name: Verify formatting
+        run: dotnet format CleanArchitecture.sln --verify-no-changes --no-restore
+
+      - name: Build
+        run: dotnet build CleanArchitecture.sln --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test CleanArchitecture.sln --configuration Release --no-build
+
+      - name: Build container
+        run: docker build --tag agentic-dotnet-starter .

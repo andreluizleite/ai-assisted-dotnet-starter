@@ -1,11 +1,9 @@
-using MediatR;
 using CleanArchitecture.Application.Dtos;
+using MediatR;
 
 namespace CleanArchitecture.Application.Commands;
 
-public class CreateCustomerCommand : IRequest<CustomerDto>
-{
-    public string FirstName { get; set; } = default!;
-    public string LastName { get; set; } = default!;
-    public string Email { get; set; } = default!;
-}
+public sealed record CreateCustomerCommand(
+    string FirstName,
+    string LastName,
+    string Email) : IRequest<CustomerDto>;

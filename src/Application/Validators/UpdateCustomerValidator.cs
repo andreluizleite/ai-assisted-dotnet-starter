@@ -1,5 +1,5 @@
-using FluentValidation;
 using CleanArchitecture.Application.Commands;
+using FluentValidation;
 
 namespace CleanArchitecture.Application.Validators;
 

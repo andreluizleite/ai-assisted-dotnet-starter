@@ -1,10 +1,6 @@
-using MediatR;
 using CleanArchitecture.Application.Dtos;
+using MediatR;
 
 namespace CleanArchitecture.Application.Queries;
 
-public class GetCustomerByIdQuery : IRequest<CustomerDto?>
-{
-    public Guid Id { get; set; }
-    public GetCustomerByIdQuery(Guid id) => Id = id;
-}
+public sealed record GetCustomerByIdQuery(Guid Id) : IRequest<CustomerDto>;

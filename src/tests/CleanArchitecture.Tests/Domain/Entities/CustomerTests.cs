@@ -1,52 +1,49 @@
-using Xunit;
-using FluentAssertions;
 using CleanArchitecture.Domain.Entities;
 using CleanArchitecture.Domain.ValueObjects;
-using System;
 
-namespace CleanArchitecture.Tests.Domain.Entities
+namespace CleanArchitecture.Tests.Domain.Entities;
+
+public sealed class CustomerTests
 {
-    public class CustomerTests
+    [Fact]
+    public void Create_NormalizesNamesAndSetsCreationTime()
     {
-        [Fact]
-        public void Constructor_ShouldSetPropertiesCorrectly()
-        {
-            // Arrange
-            var id = Guid.NewGuid();
-            var firstName = "John";
-            var lastName = "Doe";
-            var email = new Email("john.doe@example.com");
+        var createdAt = new DateTimeOffset(2026, 9, 4, 12, 0, 0, TimeSpan.Zero);
 
-            // Act
-            var customer = new Customer(id, firstName, lastName, email);
+        var customer = Customer.Create(
+            "  Ada ",
+            " Lovelace  ",
+            new Email("ADA@example.com"),
+            createdAt);
 
-            // Assert
-            customer.Id.Should().Be(id);
-            customer.FirstName.Should().Be(firstName);
-            customer.LastName.Should().Be(lastName);
-            customer.Email.Should().Be(email);
-            customer.CreatedAt.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
-            customer.UpdatedAt.Should().BeNull();
-        }
+        Assert.NotEqual(Guid.Empty, customer.Id);
+        Assert.Equal("Ada", customer.FirstName);
+        Assert.Equal("Lovelace", customer.LastName);
+        Assert.Equal("ada@example.com", customer.Email.Value);
+        Assert.Equal(createdAt, customer.CreatedAt);
+        Assert.Null(customer.UpdatedAt);
+    }
 
-        [Fact]
-        public void Update_ShouldChangePropertiesAndSetUpdatedAt()
-        {
-            // Arrange
-            var id = Guid.NewGuid();
-            var customer = new Customer(id, "John", "Doe", new Email("john.doe@example.com"));
-            var newFirstName = "Jane";
-            var newLastName = "Smith";
-            var newEmail = new Email("jane.smith@example.com");
+    [Fact]
+    public void Create_RejectsBlankName()
+    {
+        var exception = Assert.Throws<ArgumentException>(
+            () => Customer.Create(" ", "Lovelace", new Email("ada@example.com")));
 
-            // Act
-            customer.Update(newFirstName, newLastName, newEmail);
+        Assert.Equal("firstName", exception.ParamName);
+    }
 
-            // Assert
-            customer.FirstName.Should().Be(newFirstName);
-            customer.LastName.Should().Be(newLastName);
-            customer.Email.Should().Be(newEmail);
-            customer.UpdatedAt.Should().NotBeNull();
-        }
+    [Fact]
+    public void Update_ChangesContactDataAndSetsUpdateTime()
+    {
+        var customer = Customer.Create("Ada", "Lovelace", new Email("ada@example.com"));
+        var updatedAt = new DateTimeOffset(2026, 9, 5, 12, 0, 0, TimeSpan.Zero);
+
+        customer.Update("Grace", "Hopper", new Email("grace@example.com"), updatedAt);
+
+        Assert.Equal("Grace", customer.FirstName);
+        Assert.Equal("Hopper", customer.LastName);
+        Assert.Equal("grace@example.com", customer.Email.Value);
+        Assert.Equal(updatedAt, customer.UpdatedAt);
     }
 }

@@ -1,17 +1,16 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace CleanArchitecture.Infrastructure.Persistence
-{
-    public class DesignTimeAppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
-    {
-        public AppDbContext CreateDbContext(string[] args)
-        {
-            var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-            // Update the connection string as needed for your environment
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=AndreArchitectureDb;Trusted_Connection=True;MultipleActiveResultSets=true");
+namespace CleanArchitecture.Infrastructure.Persistence;
 
-            return new AppDbContext(optionsBuilder.Options);
-        }
+public sealed class DesignTimeAppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
+{
+    public AppDbContext CreateDbContext(string[] args)
+    {
+        var options = new DbContextOptionsBuilder<AppDbContext>()
+            .UseSqlite("Data Source=architecture.db")
+            .Options;
+
+        return new AppDbContext(options);
     }
 }
