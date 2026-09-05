@@ -1,13 +1,28 @@
-# Agentic .NET Architecture Starter
+# AI-Assisted .NET Architecture Starter
 
 [![CI](https://github.com/andreluizleite/Andre-Architecture/actions/workflows/ci.yml/badge.svg)](https://github.com/andreluizleite/Andre-Architecture/actions/workflows/ci.yml)
 [![.NET 10](https://img.shields.io/badge/.NET-10-512BD4)](https://dotnet.microsoft.com/)
 
 A small, executable reference for building .NET services with Clean Architecture,
-DDD-oriented domain rules, CQRS and a controlled AI-assisted engineering workflow.
+DDD-oriented domain rules, CQRS and a controlled workflow for coding agents.
 
 This is intentionally a starter, not a framework. It demonstrates one complete Customer
 vertical slice rather than many empty abstractions.
+
+## What the agents are
+
+The agents in this repository work during software development. They are not C# services
+and do not run inside the API.
+
+- AGENTS.md gives compatible coding agents durable architecture and quality instructions.
+- The Analyst, Implementer, Reviewer and Tester are suggested engineering responsibilities.
+- One coding agent can perform every role for a small task.
+- An agent harness may delegate the roles to separate subagents when independent work is useful.
+
+The runtime application remains a deterministic Customer API. It makes no LLM call,
+requires no model and contains no multi-agent orchestrator. The executable value comes
+from combining clear agent instructions with code, tests and CI that independently verify
+the result.
 
 ## Why this repository exists
 
