@@ -1,12 +1,10 @@
-using MediatR;
 using CleanArchitecture.Application.Dtos;
+using MediatR;
 
 namespace CleanArchitecture.Application.Commands;
 
-public class UpdateCustomerCommand : IRequest<CustomerDto>
-{
-    public Guid Id { get; set; }
-    public string FirstName { get; set; } = default!;
-    public string LastName { get; set; } = default!;
-    public string Email { get; set; } = default!;
-}
+public sealed record UpdateCustomerCommand(
+    Guid Id,
+    string FirstName,
+    string LastName,
+    string Email) : IRequest<CustomerDto>;

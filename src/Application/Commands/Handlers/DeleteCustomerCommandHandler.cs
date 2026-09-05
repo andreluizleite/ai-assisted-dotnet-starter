@@ -1,18 +1,17 @@
-using MediatR;
+using CleanArchitecture.Application.Common.Exceptions;
 using CleanArchitecture.Domain.Repositories;
+using MediatR;
 
 namespace CleanArchitecture.Application.Commands.Handlers;
 
-public class DeleteCustomerCommandHandler : IRequestHandler<DeleteCustomerCommand>
+public sealed class DeleteCustomerCommandHandler(ICustomerRepository repository)
+    : IRequestHandler<DeleteCustomerCommand>
 {
-    private readonly ICustomerRepository _repository;
-    public DeleteCustomerCommandHandler(ICustomerRepository repository)
-        => _repository = repository;
-
     public async Task Handle(DeleteCustomerCommand request, CancellationToken cancellationToken)
     {
-        var customer = await _repository.GetByIdAsync(request.Id, cancellationToken)
-            ?? throw new Exception("Customer not found");
-        await _repository.DeleteAsync(customer, cancellationToken);
+        var customer = await repository.GetByIdAsync(request.Id, cancellationToken)
+            ?? throw new CustomerNotFoundException(request.Id);
+
+        await repository.DeleteAsync(customer, cancellationToken);
     }
 }

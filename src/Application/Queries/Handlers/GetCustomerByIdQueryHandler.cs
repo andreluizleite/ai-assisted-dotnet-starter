@@ -1,26 +1,20 @@
-using MediatR;
+using CleanArchitecture.Application.Common.Exceptions;
 using CleanArchitecture.Application.Dtos;
 using CleanArchitecture.Domain.Repositories;
+using MediatR;
 
 namespace CleanArchitecture.Application.Queries.Handlers;
 
-public class GetCustomerByIdQueryHandler : IRequestHandler<GetCustomerByIdQuery, CustomerDto?>
+public sealed class GetCustomerByIdQueryHandler(ICustomerRepository repository)
+    : IRequestHandler<GetCustomerByIdQuery, CustomerDto>
 {
-    private readonly ICustomerRepository _repository;
-    public GetCustomerByIdQueryHandler(ICustomerRepository repository)
-        => _repository = repository;
-
-    public async Task<CustomerDto?> Handle(GetCustomerByIdQuery request, CancellationToken cancellationToken)
+    public async Task<CustomerDto> Handle(
+        GetCustomerByIdQuery request,
+        CancellationToken cancellationToken)
     {
-        var customer = await _repository.GetByIdAsync(request.Id, cancellationToken);
-        return customer == null ? null : new CustomerDto
-        {
-            Id = customer.Id,
-            FirstName = customer.FirstName,
-            LastName = customer.LastName,
-            Email = customer.Email.Value,
-            CreatedAt = customer.CreatedAt,
-            UpdatedAt = customer.UpdatedAt
-        };
+        var customer = await repository.GetByIdAsync(request.Id, cancellationToken)
+            ?? throw new CustomerNotFoundException(request.Id);
+
+        return customer.ToDto();
     }
 }

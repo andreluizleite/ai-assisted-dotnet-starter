@@ -1,28 +1,28 @@
-using MediatR;
+using CleanArchitecture.Application.Common.Exceptions;
 using CleanArchitecture.Application.Dtos;
 using CleanArchitecture.Domain.Entities;
 using CleanArchitecture.Domain.Repositories;
 using CleanArchitecture.Domain.ValueObjects;
+using MediatR;
 
 namespace CleanArchitecture.Application.Commands.Handlers;
 
-public class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerCommand, CustomerDto>
+public sealed class CreateCustomerCommandHandler(ICustomerRepository repository)
+    : IRequestHandler<CreateCustomerCommand, CustomerDto>
 {
-    private readonly ICustomerRepository _repository;
-    public CreateCustomerCommandHandler(ICustomerRepository repository)
-        => _repository = repository;
-
-    public async Task<CustomerDto> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
+    public async Task<CustomerDto> Handle(
+        CreateCustomerCommand request,
+        CancellationToken cancellationToken)
     {
-        var customer = new Customer(Guid.NewGuid(), request.FirstName, request.LastName, new Email(request.Email));
-        await _repository.AddAsync(customer, cancellationToken);
-        return new CustomerDto
+        var email = new Email(request.Email);
+        if (await repository.EmailExistsAsync(email.Value, cancellationToken: cancellationToken))
         {
-            Id = customer.Id,
-            FirstName = customer.FirstName,
-            LastName = customer.LastName,
-            Email = customer.Email.Value,
-            CreatedAt = customer.CreatedAt
-        };
+            throw new EmailAlreadyInUseException(email.Value);
+        }
+
+        var customer = Customer.Create(request.FirstName, request.LastName, email);
+        await repository.AddAsync(customer, cancellationToken);
+
+        return customer.ToDto();
     }
 }
