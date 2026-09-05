@@ -38,7 +38,7 @@ Run these commands from the repository root:
 dotnet format CleanArchitecture.sln --verify-no-changes
 dotnet build CleanArchitecture.sln --configuration Release --no-restore
 dotnet test CleanArchitecture.sln --configuration Release --no-build
-docker build --tag agentic-dotnet-starter .
+docker build --tag ai-assisted-dotnet-starter .
 ~~~
 
 Update tests and documentation whenever behavior or an architectural decision changes.
