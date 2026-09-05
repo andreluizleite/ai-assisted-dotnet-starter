@@ -1,8 +1,8 @@
 # AI-Assisted .NET Architecture Starter
 
-[![CI](https://github.com/andreluizleite/Andre-Architecture/actions/workflows/ci.yml/badge.svg)](https://github.com/andreluizleite/Andre-Architecture/actions/workflows/ci.yml)
+[![CI](https://github.com/andreluizleite/ai-assisted-dotnet-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/andreluizleite/ai-assisted-dotnet-starter/actions/workflows/ci.yml)
 [![.NET 10](https://img.shields.io/badge/.NET-10-512BD4)](https://dotnet.microsoft.com/)
-[![Release](https://img.shields.io/github/v/release/andreluizleite/Andre-Architecture)](https://github.com/andreluizleite/Andre-Architecture/releases/latest)
+[![Release](https://img.shields.io/github/v/release/andreluizleite/ai-assisted-dotnet-starter)](https://github.com/andreluizleite/ai-assisted-dotnet-starter/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 A small, executable reference for building .NET services with Clean Architecture,
